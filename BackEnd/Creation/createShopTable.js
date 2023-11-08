@@ -10,8 +10,7 @@ async function createShopTable(){
             Location VARCHAR(50) NOT NULL,
             Status VARCHAR(50) NOT NULL,
             Vendor_ID VARCHAR(50),
-            FOREIGN KEY (Vendor_ID) REFERENCES Vendor(Vendor_ID),
-            UNIQUE (Name) 
+            FOREIGN KEY (Vendor_ID) REFERENCES Vendor(Vendor_ID) 
         );`;
 
         await pool.query(createShopTableQuery);
