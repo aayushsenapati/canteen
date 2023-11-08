@@ -5,7 +5,7 @@ async function createFoodItemTable(){
 
         const createFoodItemTableQuery = `
         CREATE TABLE IF NOT EXISTS  FoodItem(
-            Food_ID VARCHAR(50) PRIMARY KEY,
+            Food_ID SERIAL PRIMARY KEY,
             Name VARCHAR(50) NOT NULL,
             Description TEXT NOT NULL,
             Price DECIMAL(10,2) NOT NULL

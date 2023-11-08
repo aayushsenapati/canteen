@@ -5,12 +5,13 @@ async function createShopTable(){
 
         const createShopTableQuery = `
         CREATE TABLE IF NOT EXISTS  Shop(
-            Shop_ID VARCHAR(50) PRIMARY KEY,
+            Shop_ID SERIAL PRIMARY KEY,
             Name VARCHAR(50) NOT NULL,
             Location VARCHAR(50) NOT NULL,
             Status VARCHAR(50) NOT NULL,
             Vendor_ID VARCHAR(50),
-            FOREIGN KEY (Vendor_ID) REFERENCES Vendor(Vendor_ID) 
+            FOREIGN KEY (Vendor_ID) REFERENCES Vendor(Vendor_ID),
+            UNIQUE (Name) 
         );`;
 
         await pool.query(createShopTableQuery);

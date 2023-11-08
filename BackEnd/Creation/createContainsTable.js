@@ -5,8 +5,8 @@ async function createContainsTable(){
 
         const createContainsTableQuery = `
         CREATE TABLE IF NOT EXISTS  Contains(
-            Orders_ID VARCHAR(50),
-            Food_ID VARCHAR(50),
+            Orders_ID INT,
+            Food_ID INT,
             Quantity INT NOT NULL,
             PRIMARY KEY (Orders_ID,Food_ID),
             FOREIGN KEY (Orders_ID) REFERENCES Orders(Orders_ID),

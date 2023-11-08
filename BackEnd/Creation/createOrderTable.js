@@ -5,7 +5,7 @@ async function createOrdersTable(){
 
         const createOrdersTableQuery = `
         CREATE TABLE IF NOT EXISTS  Orders(
-            Orders_ID VARCHAR(50) PRIMARY KEY,
+            Orders_ID SERIAL PRIMARY KEY,
             Status VARCHAR(50) NOT NULL,
             OrdersTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             TotalCost DECIMAL(10,2) NOT NULL,

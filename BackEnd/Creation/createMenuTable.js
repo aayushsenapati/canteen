@@ -5,8 +5,8 @@ async function createMenuTable(){
 
         const createMenuTableQuery = `
         CREATE TABLE IF NOT EXISTS  Menu(
-            Shop_ID VARCHAR(50),
-            Food_ID VARCHAR(50),
+            Shop_ID INT,
+            Food_ID INT,
             PRIMARY KEY (Shop_ID,Food_ID),
             FOREIGN KEY (Shop_ID) REFERENCES Shop(Shop_ID),
             FOREIGN KEY (Food_ID) REFERENCES FoodItem(Food_ID)
