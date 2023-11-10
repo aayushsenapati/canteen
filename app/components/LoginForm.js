@@ -1,11 +1,9 @@
-import Link from 'next/link'
+import { signIn } from 'next-auth/client'
 import { useState } from 'react'
-import bcrypt from 'bcryptjs'
 import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/client'
+import bcrypt from 'bcryptjs'
 
 const LoginForm = () => {
-  const [session, loading] = useSession()
   const router = useRouter()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,35 +12,14 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      setError("All fields are necessary.");
-      return;
-    }
+    const hashedPassword = bcrypt.hashSync(password, 10);
 
-    try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email })
-      });
+    const result = await signIn('credentials', { email, password: hashedPassword, redirect: false })
 
-      if (!response.ok) {
-        throw new Error("Response is not OK");
-      }
-
-      const data = await response.json();
-      const hashedPassword = data.password;
-
-      if (bcrypt.compareSync(password, hashedPassword)) {
-        // login successful, redirect to dashboard
-        router.push('/dashboard');
-      } else {
-        setError("Invalid credentials");
-      }
-    } catch (err) {
-      setError(err.message);
+    if (!result.error) {
+      router.push('/dashboard');
+    } else {
+      setError(result.error);
     }
   }
   return (
