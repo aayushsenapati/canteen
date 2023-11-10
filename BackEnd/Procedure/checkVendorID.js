@@ -5,12 +5,12 @@ async function checkVendorID(){
     try{
 
         const createStoredProcedureQuery=`
-        CREATE OR REPLACE FUNCTION check_vendor_exists(p_vendor_ID VARCHAR(50))
+        CREATE OR REPLACE FUNCTION check_vendor_exists(p_Email_ID VARCHAR(50))
         RETURNS BOOLEAN AS $$
         DECLARE
             vendor_exists BOOLEAN;
         BEGIN 
-            SELECT EXISTS (SELECT 1 FROM Vendor WHERE Vendor.Vendor_ID = p_vendor_ID) INTO vendor_exists;
+            SELECT EXISTS (SELECT 1 FROM Vendor WHERE Vendor.EmailID = p_Email_ID) INTO vendor_exists;
             RETURN vendor_exists;
         END;
         $$ LANGUAGE plpgsql;

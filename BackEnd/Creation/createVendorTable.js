@@ -5,11 +5,13 @@ async function createVendorTable(){
 
         const createVendorTableQuery = `
         CREATE TABLE IF NOT EXISTS  Vendor(
-            Vendor_ID VARCHAR(50) PRIMARY KEY,
+            Vendor_ID SERIAL PRIMARY KEY,
             FirstName VARCHAR(50) NOT NULL,
             LastName VARCHAR(50) NOT NULL,
             EmailID VARCHAR(50) NOT NULL,
-            PhoneNumber VARCHAR(50) NOT NULL
+            PhoneNumber VARCHAR(50) NOT NULL,
+            Password VARCHAR(50) NOT NULL,
+            UNIQUE (EmailID)
         );`;
 
         await pool.query(createVendorTableQuery);

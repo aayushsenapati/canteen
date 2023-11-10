@@ -9,7 +9,8 @@ async function createShopTable(){
             Name VARCHAR(50) NOT NULL,
             Location VARCHAR(50) NOT NULL,
             Status VARCHAR(50) NOT NULL,
-            Vendor_ID VARCHAR(50),
+            Vendor_ID INT,
+            TotalProfit DECIMAL(10,2) DEFAULT 0,
             FOREIGN KEY (Vendor_ID) REFERENCES Vendor(Vendor_ID) 
         );`;
 
