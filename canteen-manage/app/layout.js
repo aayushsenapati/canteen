@@ -1,23 +1,12 @@
-import { useSession } from 'next-auth/client'
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
+import Providers from './components/Providers'
 
 const Layout = ({ children }) => {
-  const [session, loading] = useSession()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!loading && !session) {
-      router.push('/login')
-    }
-  }, [session, loading])
-
-  if (loading) return null
-
   return (
-    <div>
-      {children}
-    </div>
+    <body>
+      <Providers>
+        {children}
+      </Providers>
+    </body>
   )
 }
 

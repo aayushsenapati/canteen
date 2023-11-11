@@ -1,6 +1,6 @@
-import LoginForm from "./components/LoginForm"
+
 export default function Home() {
   return (
-    <main><LoginForm/></main>
+    <main><div>hello vendors please sign in or register</div></main>
   )
 }

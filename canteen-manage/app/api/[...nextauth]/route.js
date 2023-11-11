@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
+import bcrypt from 'bcryptjs';
 
 export default NextAuth({
   providers: [
@@ -10,12 +11,14 @@ export default NextAuth({
         password: {  label: "Password", type: "password" }
       },
       authorize: async (credentials) => {
-        const response = await fetch('/api/login', {
+        const hashedPassword = await bcrypt.hash(credentials.password, 10);
+
+        const response = await fetch('http://server:5000/Vendor/Verify', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ email: credentials.email, password: credentials.password })
+          body: JSON.stringify({ EmailID: credentials.email, Password: hashedPassword })
         });
 
         if (!response.ok) {
@@ -24,26 +27,19 @@ export default NextAuth({
 
         const data = await response.json();
 
-        if (data.success) {
+        if (data.Success) {
           const user = { id: 1, email: credentials.email }
-          return Promise.resolve(user)
+          return user
         } else {
-          return Promise.resolve(null)
+          return null
         }
       }
     })
   ],
-  session: {
-    jwt: true,
+  pages: {
+    signIn: "/signIn",
   },
-  callbacks: {
-    async jwt(token, user) {
-      if (user) token.user = user
-      return token
-    },
-    async session(session, token) {
-      session.user = token.user
-      return session
-    }
-  }
-})
+});
+
+export { handler as GET, handler as POST };
+  

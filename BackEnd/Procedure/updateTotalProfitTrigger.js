@@ -24,7 +24,7 @@ async function updateTotalProfitTrigger(){
         END;
         $$ LANGUAGE plpgsql;
         
-        CREATE TRIGGER IF NOT EXISTS update_total_profit_trigger
+        CREATE TRIGGER update_total_profit_trigger
         AFTER INSERT ON Contains
         FOR EACH ROW
         EXECUTE FUNCTION update_shop_total_profit();

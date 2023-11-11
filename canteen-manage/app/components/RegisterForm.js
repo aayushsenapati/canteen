@@ -18,15 +18,16 @@ const RegisterForm = () => {
           return;
         }
 
-        const salt = bcrypt.genSaltSync(10);
-        const hashedPassword = bcrypt.hashSync(password, salt);
+        /* const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt); */
+        //const hashedPassword=await bcrypt.hash(credentials.password, 10);
 
         const user = {
           firstName,
           lastName,
           email,
           phoneNumber,
-          password: hashedPassword
+          password: password
         };
 
         try {
