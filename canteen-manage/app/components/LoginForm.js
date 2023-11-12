@@ -4,10 +4,12 @@ import { useRef ,useState} from 'react'
 import Link from 'next/link'
 
 
+
 const LoginForm = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const [error, setError] = useState("");
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +22,9 @@ const LoginForm = () => {
       return;
     }
 
-    const result = await signIn('credentials', { email, password, redirect: false })
+    const result = await signIn('credentials', { email, password , callbackUrl:'/dashboard'})
+    //clear password reference
+    passwordRef.current.value = "";
 
     if (!result.error) {
       console.log('yay')
