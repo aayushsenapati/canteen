@@ -1,24 +1,22 @@
 import NextAuth from 'next-auth'
-import Providers from 'next-auth/providers'
+import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from 'bcryptjs';
 
-export default NextAuth({
+const handler= NextAuth({
   providers: [
-    Providers.Credentials({
+    CredentialsProvider({
       name: 'Credentials',
       credentials: {
         email: { label: "Email", type: "text" },
         password: {  label: "Password", type: "password" }
       },
       authorize: async (credentials) => {
-        const hashedPassword = await bcrypt.hash(credentials.password, 10);
-
         const response = await fetch('http://server:5000/Vendor/Verify', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ EmailID: credentials.email, Password: hashedPassword })
+          body: JSON.stringify({ EmailID: credentials.email })
         });
 
         if (!response.ok) {
@@ -27,7 +25,14 @@ export default NextAuth({
 
         const data = await response.json();
 
-        if (data.Success) {
+        if (data.Error) {
+          throw new Error(data.Error);
+        }
+
+        const isMatch = await bcrypt.compare(credentials.password, data.HashedPassword);
+        console.log(isMatch)
+
+        if (isMatch) {
           const user = { id: 1, email: credentials.email }
           return user
         } else {
@@ -37,9 +42,10 @@ export default NextAuth({
     })
   ],
   pages: {
-    signIn: "/signIn",
+    signIn: "/login",
   },
 });
 
-export { handler as GET, handler as POST };
+export { handler as GET,handler as POST}
+
   

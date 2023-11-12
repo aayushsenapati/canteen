@@ -1,12 +1,15 @@
 import Providers from './components/Providers'
+import "./globals.css"
 
 const Layout = ({ children }) => {
   return (
-    <body>
-      <Providers>
-        {children}
-      </Providers>
-    </body>
+    <html lang="en">
+      <body>
+        <Providers>
+          {children}
+        </Providers>
+      </body>
+    </html>
   )
 }
 

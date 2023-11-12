@@ -87,35 +87,25 @@ app.post("/Vendor",async (req,res) =>{
 
 
 //Verify if the vendor has correct email id and password.
-app.post("/Vendor/Verify",async (req,res) =>{
-    try{
-        const {EmailID, Password} = req.body;
+app.post("/Vendor/Verify", async (req, res) => {
+    try {
+        const { EmailID } = req.body;
 
-            //Check whether the vendor exists.
-            const result = await pool.query(`SELECT check_vendor_exists($1) AS vendor_exists;`,[EmailID]);
-            const vendorExists = result.rows[0].vendor_exists;
+        // Check whether the vendor exists.
+        const result = await pool.query(`SELECT check_vendor_exists($1) AS vendor_exists;`, [EmailID]);
+        const vendorExists = result.rows[0].vendor_exists;
 
-            if(vendorExists){
-                const result = await pool.query(`SELECT Password FROM Vendor WHERE EmailID = $1;`,[EmailID]);
-                console.log(result);
-                const expectedPassword = result.rows[0].password;
-                
-                //Verify password.
-                if(Password == expectedPassword){
-                    console.log("Successfully logged in.");
-                    res.json({"Success":"Successfully logged in."});
-                }
-                else{
-                    console.log("Incorrect Password. Try again.");
-                    res.json({"Error":"Incorrect Password. Try again."});                    
-                }
-            }
-            else{
-                console.log("Username or password incorrect.");
-                res.json({"Error":"Username or password incorrect."});
-            }
-    }
-    catch(error){
+        if (vendorExists) {
+            const result = await pool.query(`SELECT Password FROM Vendor WHERE EmailID = $1;`, [EmailID]);
+            const hashedPassword = result.rows[0].password;
+
+            // Return hashed password.
+            res.json({ "HashedPassword": hashedPassword });
+        } else {
+            console.log("Username incorrect.");
+            res.json({ "Error": "Username incorrect." });
+        }
+    } catch (error) {
         console.log(error);
     }
 });

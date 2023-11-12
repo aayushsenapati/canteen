@@ -1,10 +1,12 @@
 import bcrypt from 'bcryptjs';
 
 export async function POST(req, res) {
-  const { firstName, lastName, email, phoneNumber, password } = req.body;
+  const body=await req.json()
+  console.log(body)
+
 
   // Hash the password
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(body.password, 10);
 
   // Send a request to your server
   const response = await fetch('http://server:5000/Vendor', {
@@ -13,21 +15,22 @@ export async function POST(req, res) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      FirstName: firstName,
-      LastName: lastName,
-      EmailID: email,
-      PhoneNumber: phoneNumber,
+      FirstName: body.firstName,
+      LastName: body.lastName,
+      EmailID: body.email,
+      PhoneNumber: body.phoneNumber,
       Password: hashedPassword
     })
   });
 
-  if (!response.ok) {
+  const data = await response.json();
+
+  if (!response.ok || data.Error) {
     // Handle error response
-    const errorData = await response.json();
-    res.status(response.status).json(errorData);
+    const errorMessage = data.Error || 'An error occurred';
+    res.status(response.status).json({ error: errorMessage });
   } else {
     // Handle success response
-    const data = await response.json();
     res.status(200).json(data);
   }
 }
