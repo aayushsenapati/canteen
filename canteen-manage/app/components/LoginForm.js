@@ -22,7 +22,7 @@ const LoginForm = () => {
       return;
     }
 
-    const result = await signIn('credentials', { email, password , callbackUrl:'/dashboard'})
+    const result = await signIn('credentials', { email, password , callbackUrl:'/shops'})
     //clear password reference
     passwordRef.current.value = "";
 

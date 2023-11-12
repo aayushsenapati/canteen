@@ -1,6 +1,7 @@
 "use client"
 import Link from 'next/link'
 import { useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 const RegisterForm = () => {
     const firstNameRef = useRef();
@@ -9,6 +10,7 @@ const RegisterForm = () => {
     const phoneNumberRef = useRef();
     const passwordRef = useRef();
     const [error,setError] = useState("");
+    const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -45,8 +47,9 @@ const RegisterForm = () => {
             const data = await response.json();
             setError(data.error);
           } else {
-            // Registration was successful
-            // Redirect to login page or show a success message
+            const data = await response.json();
+            router.replace("/login")
+            console.log(data)
           }
         } catch (err) {
           setError(err.message);
