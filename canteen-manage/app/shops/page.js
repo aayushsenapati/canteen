@@ -15,7 +15,7 @@ const Dashboard = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [newShop, setNewShop] = useState({ Name: '', Location: '', Status: '' })
   const [currentShop, setCurrentShop] = useState({ Name: '', Location: '', Status: '',Shop_ID:'' })
-
+  
   const handleInputChange = (event) => {
     setNewShop({ ...newShop, [event.target.name]: event.target.value })
   }
@@ -23,6 +23,10 @@ const Dashboard = () => {
   const handleUpdateChange = (event) => {
     setCurrentShop({ ...currentShop, [event.target.name]: event.target.value })
   }
+
+  const onDelete = (shop_id) => {
+    setShops(prevShops => prevShops.filter(shop => shop.shop_id !== shop_id));
+  };
 
   const handleSubmitNew = async (event) => {
     event.preventDefault()
@@ -33,7 +37,7 @@ const Dashboard = () => {
     })
     const data = await response.json()
     if (data.error) {
-      setError(data.error)
+      alert(data.error)
     } else {
       setShops([...shops, data])
       setNewShop({ Name: '', Location: '', Status: '' })
@@ -44,15 +48,19 @@ const Dashboard = () => {
   const handleEditSubmit = async (event) => {
     event.preventDefault();
     const response = await fetch('/api/updateRest', {
-      method: 'POST',
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...currentShop, EmailID: session.user.email }),
     });
     const data = await response.json();
     if (data.error) {
-      setError(data.error);
+      alert(data.error);
     } else {
-      setShops(prevShops => prevShops.map(shop => shop.Shop_ID === currentShop.Shop_ID ? data : shop));
+      //setShops(prevShops => prevShops.map(shop => shop.Shop_ID === currentShop.Shop_ID ? data : shop));
+      const newArr=shops.map(shop => shop.shop_id === currentShop.Shop_ID ? data  : shop)
+      setShops(newArr);
+      console.log("this is shops:",shops)
+      console.log("this is data:",data)
       setCurrentShop({ Name: '', Location: '', Status: '',Shop_ID:'' });
       setIsEditModalOpen(false);
     }
@@ -197,7 +205,7 @@ const Dashboard = () => {
               Shop_ID: shop.shop_id
             })
             setIsEditModalOpen(true)
-          }} />)}
+          }} onDelete={onDelete}/>)}
         </div>
       </div>
     )
