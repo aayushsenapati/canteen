@@ -6,7 +6,7 @@ const Card = ({ shop ,onEdit,onDelete}) => {
   // Add this function inside your Card component
 const handleDelete = async (event) => {
   event.stopPropagation(); // Prevent triggering onEdit when delete is clicked
-  const response = await fetch('/api/deleteRest', {
+  const response = await fetch('/api/rest', {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ Shop_ID: shop.shop_id }),

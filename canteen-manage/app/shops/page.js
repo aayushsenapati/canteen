@@ -30,7 +30,7 @@ const Dashboard = () => {
 
   const handleSubmitNew = async (event) => {
     event.preventDefault()
-    const response = await fetch('/api/addRest', {
+    const response = await fetch('/api/rest', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...newShop, EmailID: session.user.email }),
@@ -47,7 +47,7 @@ const Dashboard = () => {
 
   const handleEditSubmit = async (event) => {
     event.preventDefault();
-    const response = await fetch('/api/updateRest', {
+    const response = await fetch('/api/rest', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...currentShop, EmailID: session.user.email }),
@@ -71,7 +71,7 @@ const Dashboard = () => {
 
     // Fetch shops if session exists
     if (session) {
-      fetch(`/api/getShops?email=${session.user.email}`)
+      fetch(`/api/rest?email=${session.user.email}`)
         .then(response => {
           console.log(response)
           return response.json()

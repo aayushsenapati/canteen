@@ -1,10 +1,12 @@
 "use client"
 import Link from 'next/link'
-import { useRef, useState } from 'react'
+import { useRef, useState,useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
 const RegisterForm = () => {
     const firstNameRef = useRef();
+    const { data: session, status } = useSession()
     const lastNameRef = useRef();
     const emailRef = useRef();
     const phoneNumberRef = useRef();
@@ -12,6 +14,14 @@ const RegisterForm = () => {
     const [error,setError] = useState("");
     const router = useRouter();
 
+
+
+    useEffect(() => {
+      // If the session exists, redirect to the dashboard
+      if (session) {
+        router.replace('/');
+      }
+    }, [session]);
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -57,7 +67,7 @@ const RegisterForm = () => {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen py-2">
+        !session&&(<div className="flex flex-col items-center justify-center min-h-screen py-2">
           <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <input ref={firstNameRef} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4" type="text" placeholder="First Name" />
             <input ref={lastNameRef} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4" type="text" placeholder="Last Name" />
@@ -77,7 +87,7 @@ const RegisterForm = () => {
               </Link>
             </p>
           </form>
-        </div>
+        </div>)
       )
 }
 

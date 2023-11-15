@@ -1,16 +1,25 @@
 "use client"
 import { signIn } from "next-auth/react";
-import { useRef ,useState} from 'react'
+import { useRef ,useState,useEffect} from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 
 
 
 const LoginForm = () => {
+  const { data: session, status } = useSession()
   const emailRef = useRef();
   const passwordRef = useRef();
   const [error, setError] = useState("");
+  const router = useRouter()
 
-
+  useEffect(() => {
+    // If the session exists, redirect to the dashboard
+    if (session) {
+      router.replace('/');
+    }
+  }, [session]);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -34,7 +43,7 @@ const LoginForm = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+    !session&&(<div className="flex flex-col items-center justify-center min-h-screen py-2">
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <input ref={emailRef} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4" type="email" placeholder="Email" />
         <input ref={passwordRef} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4" type="password" placeholder="Password" />
@@ -51,7 +60,7 @@ const LoginForm = () => {
           </Link>
         </p>
       </form>
-    </div>
+    </div>)
   )
 }
 
