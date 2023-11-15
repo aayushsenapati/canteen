@@ -12,12 +12,20 @@ const Navbar = () => {
   return (
     <nav className="bg-blue-500 p-4">
       <div className="flex items-center justify-between">
+      <div className="flex">
         <button 
           onClick={() => router.push('/shops')} 
           className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${pathname === '/shops' ? 'bg-blue-700' : ''}`}
         >
           Shops
         </button>
+        <button 
+          onClick={() => router.push('/menu')} 
+          className={`ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${pathname === '/menu' ? 'bg-blue-700' : ''}`}
+        >
+          Menu
+        </button>
+      </div>
         <div className="flex items-center space-x-4">
           <div className="text-white text-lg">
             {session.user.email}

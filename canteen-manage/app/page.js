@@ -13,5 +13,6 @@ export default function Home() {
   }, [session])
   return (
     session&&(<div>hello vendors</div>)
-  )
+  ) 
 }
+
