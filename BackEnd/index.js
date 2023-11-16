@@ -53,7 +53,7 @@ async function createProceduresAndTriggers(){
 
     await checkVendorID();
     await checkShopName();
-    //await updateTotalProfitTrigger();
+    await updateTotalProfitTrigger();
 }
 
 createProceduresAndTriggers();

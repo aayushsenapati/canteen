@@ -6,14 +6,16 @@ async function updateTotalProfitTrigger(){
         const updateTotalProfitTrigger = await pool.query(`
         CREATE OR REPLACE FUNCTION update_shop_total_profit()
         RETURNS TRIGGER AS $$
+        DECLARE 
+            Total_cost NUMERIC;
         BEGIN
             
-            SELECT f.Price * NEW.Quantity INTO NEW.total_cost
+            SELECT f.Price * NEW.Quantity INTO Total_cost
             FROM FoodItem f
             WHERE f.Food_ID = NEW.Food_ID;
             
             UPDATE Shop
-            SET TotalProfit = TotalProfit + NEW.total_cost
+            SET TotalProfit = TotalProfit + Total_cost
             WHERE Shop_ID = (
                 SELECT Shop_ID
                 FROM Menu 
