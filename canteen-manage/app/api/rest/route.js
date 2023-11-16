@@ -4,7 +4,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url)
     const email = searchParams.get('email')
     console.log("hello")
-    const res = await fetch(`http://canteen-server:5000/Shop/${email}`)
+    const res = await fetch(`http://localhost:5000/Shop/${email}`)
     const shops = await res.json()
   
     if (!res.ok || shops.Error) {
@@ -23,7 +23,7 @@ const body = await req.json();
 console.log(body);
 
 // Send a DELETE request to your server
-const response = await fetch(`http://canteen-server:5000/Shop/${body.Shop_ID}`, {
+const response = await fetch(`http://localhost:5000/Shop/${body.Shop_ID}`, {
     method: 'DELETE',
     headers: {
     'Content-Type': 'application/json'
@@ -48,7 +48,7 @@ const body = await req.json()
 console.log(body)
 
 // Send a request to your server
-const response = await fetch('http://canteen-server:5000/Shop', {
+const response = await fetch('http://localhost:5000/Shop', {
     method: 'POST',
     headers: {
     'Content-Type': 'application/json'
@@ -78,7 +78,7 @@ const body = await req.json()
 console.log(body)
 
 // Send a request to your server
-const response = await fetch('http://canteen-server:5000/Shop', {
+const response = await fetch('http://localhost:5000/Shop', {
     method: 'PUT',
     headers: {
     'Content-Type': 'application/json'

@@ -4,7 +4,7 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url)
   const shopId = searchParams.get('Shop_ID')
 
-  const res = await fetch(`http://canteen-server:5000/Menu/${shopId}`)
+  const res = await fetch(`http://localhost:5000/Menu/${shopId}`)
   const menu = await res.json()
 
   if (!res.ok || menu.Error) {
@@ -23,7 +23,7 @@ export async function POST(request) {
   const body = await request.json()
   const { Name, Description, Price, Shop_ID } = body
 
-  const res = await fetch(`http://canteen-server:5000/Menu`, {
+  const res = await fetch(`http://localhost:5000/Menu`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ Name, Description, Price, Shop_ID }),
@@ -44,7 +44,7 @@ export async function DELETE(req) {
     const body = await req.json()
     const { Food_ID } = body
 
-    const response = await fetch(`http://canteen-server:5000/Menu/${Food_ID}`, {
+    const response = await fetch(`http://localhost:5000/Menu/${Food_ID}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
     })
