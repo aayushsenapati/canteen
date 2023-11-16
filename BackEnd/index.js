@@ -447,12 +447,11 @@ async function startBot(){
 
     //Welcoming message allowing users to login or register.
     client.on("message", async (message) =>{
-        if(message.body == "hi"){
-            message.reply(`Hello from canteen management system. Please login or register with your SRN.
-            If you have not registered, please type /register and please enter the following details seperated by comma:
-            /register,SRN,First Name, Last name,EmailID,PhoneNumber,Date of birth(yyyy-mm-dd).
-            If you have already registered, login by typing /login and enter your SRN seperated by comma.
-            /login , SRN.`);
+
+        if(message.body == "hi" || message.body == "Hi"){
+            message.reply(`Hello from canteen management system.\nPlease login or register with your SRN.\n`);
+            message.reply(`If you have not registered, please type /register and please enter the following details seperated by comma.\nExample:\n\n/register,SRN,First Name, Last name,EmailID,PhoneNumber,Date of birth(yyyy-mm-dd).\n`);
+            message.reply(`If you have already registered, login by typing /login and enter your SRN seperated by commas.\nExample:\n\n/login , SRN.`);
         }
 
         //Register the details into Student Table
@@ -473,7 +472,7 @@ async function startBot(){
             }
             else{
 
-                const addStudent = pool.query(`
+                const addStudent = await pool.query(`
                 INSERT INTO Student(SRN,FirstName,LastName,EmailID,DateOfBirth,PhoneNumber)
                 VALUES ($1,$2,$3,$4,$5,$6)
                 RETURNING *
@@ -495,11 +494,10 @@ async function startBot(){
 
             if(rowCount == 1){
                 
-                const listShops = await pool.query(`SELECT Shop_ID,Name FROM Shops;`);
+                const listShops = await pool.query(`SELECT Shop_ID,Name FROM Shop;`);
 
-                message.reply(`Pick a shop by typing /shop and the given shop_id seperated by comma.
-                /shop, shop_id`);
-                message.reply(`${listShops.rows}`);
+                message.reply(`Pick a shop by typing /shop and the given shop_id seperated by comma.\nExample:\n\n/shop, shop_id`);
+                message.reply(`${listShops.rows.map((item) => `ID: ${item.shop_id}, Name: ${item.name}`).join("\n")}`);
             }
             else{
                 message.reply("Incorrect details. Please register your SRN or try again.");
@@ -511,21 +509,20 @@ async function startBot(){
 
             const Shop_ID = message.body.split(',')[1];
 
-            const result = await pool.query(`SELECT * FROM Shops WHERE Shop_ID = $1;`,[Shop_ID]);
+            const result = await pool.query(`SELECT * FROM Shop WHERE Shop_ID = $1;`,[Shop_ID]);
             const rowCount = result.rowCount;
 
             if(rowCount == 1){
 
                 const foodItems = await pool.query(`
-                SELECT Food_ID,Name,Description,Price
-                FROM FoodItem
-                JOIN Menu
+                SELECT f.Food_ID,Name,Description,Price
+                FROM FoodItem f
+                JOIN Menu m
                 ON Shop_ID = $1
                 ;`,[Shop_ID]);
 
-                message.reply(`Pick the food item you want by typing /order and enter food_id and quantity seperated by comma, and end it with /end.
-                /order, SRN \n Food_ID, Quantity \n Food_ID,Quantity \n /end.`);
-                message.reply(`${foodItems.rows}`);
+                message.reply(`Pick the food item you want by typing /order and enter food_id and quantity seperated by comma, and end it with /end.\nExample:\n\n/order, SRN \n Food_ID, Quantity \n Food_ID,Quantity \n /end`);
+                message.reply(`${foodItems.rows.map((item) => `Food_ID: ${item.food_id}, Name: ${item.name}, Description: ${item.description}, Price: ${item.price}`).join("\n\n")}`);
             }
             else{
                 message.reply("Incorrect shop_ID. Please choose valid shop_ID and try again.");
@@ -537,9 +534,9 @@ async function startBot(){
         else if(message.body.startsWith("/order")){
 
             const messageBody = message.body.split("\n");
-            const SRN = null;
-            const TotalCost = 0;
-            const foodItems = [];
+            let SRN = null;
+            let TotalCost = 0;
+            let foodItems = [];
 
             for( const line of messageBody){
                 const lineSplit = line.split(",");
@@ -567,8 +564,10 @@ async function startBot(){
                             INSERT INTO Contains(Food_ID,Orders_ID,Quantity)
                             VALUES($1,$2,$3)
                             RETURNING *
-                            ;`,food_item.food_id,Orders_ID,food_item.quantity);
+                            ;`,[food_item.food_id,Orders_ID,food_item.quantity]);
                         }
+
+                        message.reply(`Complete order details are: \n\n Order_ID: ${Orders_ID}, Student SRN: ${SRN}, Total Amount: ${TotalCost}, Order Status: ${addOrder.rows[0].status}`);
                     }
                     else{
                         message.reply("Please register your SRN or give correct details.");
@@ -586,7 +585,7 @@ async function startBot(){
                     SELECT Price
                     FROM FoodItem
                     WHERE Food_ID = $1
-                    ;`,)
+                    ;`,[Food_ID]);
                     const price = result.rows[0].price;
 
                     TotalCost = TotalCost + (price * quantity);
