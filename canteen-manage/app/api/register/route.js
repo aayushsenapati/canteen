@@ -9,7 +9,7 @@ export async function POST(req) {
   const hashedPassword = await bcrypt.hash(body.Password, 10);
 
   // Send a request to your server
-  const response = await fetch('http://localhost:5000/Vendor', {
+  const response = await fetch(`http://${process.env.SERVER_IP}/Vendor`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

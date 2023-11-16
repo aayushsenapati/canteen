@@ -11,7 +11,7 @@ export const authOptions= {
         password: {  label: "Password", type: "password" }
       },
       authorize: async (credentials) => {
-        const response = await fetch('http://localhost:5000/Vendor/Verify', {
+        const response = await fetch(`http://${process.env.SERVER_IP}/Vendor/Verify`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

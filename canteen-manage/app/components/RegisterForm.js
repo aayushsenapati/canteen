@@ -82,7 +82,7 @@ const RegisterForm = () => {
           )}
             <p className="text-center mt-4">
               Have an account? 
-              <Link href="/signIn">
+              <Link href="/login">
                 <span className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">Login</span>
               </Link>
             </p>
