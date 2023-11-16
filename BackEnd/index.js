@@ -57,7 +57,7 @@ async function createProceduresAndTriggers(){
 }
 
 createProceduresAndTriggers();
-createAndGrantRoles()
+//createAndGrantRoles()
 
 //Set the port of the server.
 app.listen(5000,() => {
